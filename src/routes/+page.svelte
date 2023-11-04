@@ -1,9 +1,10 @@
 <script lang="ts">
-    import {IconBold, IconChairDirector, IconCheck, IconClick, IconDeviceFloppy, IconItalic, IconLanguage, IconMouse, IconSquareCheck, IconSquareCheckFilled, IconSquareFilled, IconStrikethrough, IconUnderline} from "@tabler/icons-svelte"
+    import {IconBold, IconChairDirector, IconCheck, IconClick, IconColorPicker, IconColorPickerOff, IconDeviceFloppy, IconItalic, IconLanguage, IconMouse, IconPalette, IconSquareCheck, IconSquareCheckFilled, IconSquareFilled, IconStrikethrough, IconUnderline} from "@tabler/icons-svelte"
     import {tippy} from 'svelte-tippy';
 
     var import_text: string;
     var edit_box: HTMLParagraphElement;
+    var col: HTMLInputElement;
     
     function load(){
         edit_box.innerHTML = ""
@@ -80,6 +81,10 @@
             edit_box.appendChild(el)
         });
     }
+    
+    function customcolor(){
+        document.execCommand("foreColor", undefined, col.value)
+    }
 </script>
 
 <main class="ml-auto mr-auto block">
@@ -108,6 +113,8 @@
             <button use:tippy={{content:"Gray", placement:"bottom"}} on:click={() => document.execCommand("foreColor", undefined, "#aaaaaa")} class="btn text-gray-400"><IconSquareFilled /></button>
             <button use:tippy={{content:"Dark Gray", placement:"bottom"}} on:click={() => document.execCommand("foreColor", undefined, "#555555")} class="btn text-gray-600"><IconSquareFilled /></button>
             <button use:tippy={{content:"Black", placement:"bottom"}} on:click={() => document.execCommand("foreColor", undefined, "#000000")} class="btn text-black"><IconSquareFilled /></button>
+            <label for="col" use:tippy={{content:"Custom Colour", placement:"bottom"}} class="btn"><IconPalette /></label>
+            <input type="color" id="col" name="col" value="#ff0000" class="w-0 invisible" on:change={customcolor} bind:this={col}>
         </div>
         <div class="flex flex-grow">
             <button class="btn" use:tippy={{content:"Click Event", placement:"bottom"}}><IconClick /></button>
@@ -120,7 +127,7 @@
         </div>
     </div>
 
-    <div class="rounded-lg bg-zinc-800 px-3 py-2 font-lexend h-96 text-lg overflow-y-auto" contenteditable="true" bind:this={edit_box}></div>
+    <div class="rounded-lg bg-zinc-800 px-3 py-2 font-minecraft h-96 text-lg overflow-y-auto" contenteditable="true" bind:this={edit_box}></div>
     <div class="flex space-x-2 items-center mt-3">
         <input class="rounded-lg bg-zinc-800 px-3 py-2 font-minecraft flex-grow" placeholder="Import..." bind:value={import_text}>
         <button class="rounded-md bg-orange-600 hover:bg-orange-500 transition-all px-3 py-2" on:click={load}>Import</button>
