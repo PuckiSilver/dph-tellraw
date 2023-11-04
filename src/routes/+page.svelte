@@ -83,7 +83,12 @@
     }
     
     function customcolor(){
+        edit_box.focus()
         document.execCommand("foreColor", undefined, col.value)
+    }
+
+    function opencolorpicker(){
+        col.click()
     }
 </script>
 
@@ -113,8 +118,8 @@
             <button use:tippy={{content:"Gray", placement:"bottom"}} on:click={() => document.execCommand("foreColor", undefined, "#aaaaaa")} class="btn text-gray-400"><IconSquareFilled /></button>
             <button use:tippy={{content:"Dark Gray", placement:"bottom"}} on:click={() => document.execCommand("foreColor", undefined, "#555555")} class="btn text-gray-600"><IconSquareFilled /></button>
             <button use:tippy={{content:"Black", placement:"bottom"}} on:click={() => document.execCommand("foreColor", undefined, "#000000")} class="btn text-black"><IconSquareFilled /></button>
-            <label for="col" use:tippy={{content:"Custom Colour", placement:"bottom"}} class="btn"><IconPalette /></label>
-            <input type="color" id="col" name="col" value="#ff0000" class="w-0 invisible" on:change={customcolor} bind:this={col}>
+            <button on:click={opencolorpicker} use:tippy={{content:"Custom Colour", placement:"bottom"}} class="btn"><IconPalette /></button>
+            <input type="color" id="col" name="col" value="#ff0000" class="w-0 invisible" on:input={customcolor} bind:this={col}>
         </div>
         <div class="flex flex-grow">
             <button class="btn" use:tippy={{content:"Click Event", placement:"bottom"}}><IconClick /></button>
