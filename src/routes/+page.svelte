@@ -1,5 +1,5 @@
 <script lang="ts">
-    import {IconBold, IconChairDirector, IconCheck, IconClick, IconColorPicker, IconColorPickerOff, IconDeviceFloppy, IconItalic, IconLanguage, IconMouse, IconPalette, IconSquareCheck, IconSquareCheckFilled, IconSquareFilled, IconStrikethrough, IconUnderline} from "@tabler/icons-svelte"
+    import {IconBold, IconCheck, IconClick, IconDeviceFloppy, IconItalic, IconLanguage, IconMouse, IconPalette, IconSquareFilled, IconStrikethrough, IconUnderline} from "@tabler/icons-svelte"
     import {tippy} from 'svelte-tippy';
 
     var import_text: string;
@@ -81,6 +81,56 @@
             edit_box.appendChild(el)
         });
     }
+
+    interface TextSection {
+        text: string;
+        styles: CSSStyleDeclaration;
+    }
+
+    function getAllTextSectionsWithStyles(node: Node, textSections: TextSection[] = []): TextSection[] {
+        if (node.nodeType === Node.TEXT_NODE) {
+            // If the node is a text node, add its content and computed styles to the array
+            const styles = window.getComputedStyle(node.parentElement!);
+            textSections.push({
+                text: node.textContent?.trim() || '',
+                styles: styles,
+            });
+        } else if (node.nodeType === Node.ELEMENT_NODE) {
+            // If the node is an element node, recursively check its children
+            node.childNodes.forEach(child => {
+                getAllTextSectionsWithStyles(child, textSections);
+            });
+        }
+        return textSections;
+    }
+
+    const rgba2hex = (rgba: string): string => {
+        const match = rgba.match(/^rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+        if (!match) {
+            throw new Error('Invalid RGBA string');
+        }
+
+        const [r, g, b] = match.slice(1).map(n => parseInt(n, 10).toString(16).padStart(2, '0'));
+        return `#${r}${g}${b}`;
+    };
+
+    function generate(){
+        var output: Array<any> = [""]
+        const all = getAllTextSectionsWithStyles(edit_box)
+        for (var item of all){
+            let out = {}
+
+            out["text"] = item.text,
+            out["color"] = rgba2hex(item.styles.color)
+
+            if(!item.styles.textDecoration.search("underline")) out["underlined"] = "true"
+            if(!item.styles.textDecoration.search("line-through")) out["strikethrough"] = "true"
+
+            output.push(out)
+            
+        }
+        console.log(output)
+    }
     
     function customcolor(){
         edit_box.focus()
@@ -93,8 +143,7 @@
 </script>
 
 <main class="ml-auto mr-auto block">
-    <h1 class="text-3xl font-bold">Datapack Hub Prototype Tellraw Editor</h1>
-    <div class="flex mt-3 mb-1 space-x-4">
+    <div class="flex mb-1 space-x-4">
         <div class="flex">
             <button class="btn" on:click={() => document.execCommand("bold")} use:tippy={{content:"Bold", placement:"bottom"}}><IconBold /></button>
             <button class="btn" on:click={() => document.execCommand("italic")} use:tippy={{content:"Italic", placement:"bottom"}}><IconItalic /></button>
@@ -128,11 +177,10 @@
         </div>
         <div class="flex space-x-2">
             <button class="p-1 hover:bg-blue-500 rounded-md transition-all bg-blue-600 flex items-center space-x-1"><IconDeviceFloppy /></button>
-            <button class="p-1 px-2 hover:bg-green-500 rounded-md transition-all bg-green-600 flex items-center space-x-1"><IconCheck /><span>Generate</span></button>
+            <button class="p-1 px-2 hover:bg-green-500 rounded-md transition-all bg-green-600 flex items-center space-x-1" on:click={generate}><IconCheck /><span>Generate</span></button>
         </div>
     </div>
-
-    <div class="rounded-lg bg-zinc-800 px-3 py-2 font-minecraft h-96 text-lg overflow-y-auto" contenteditable="true" bind:this={edit_box}></div>
+    <div class="rounded-lg bg-zinc-800 px-3 py-2 font-minecraft h-96 text-lg overflow-y-auto w-full" contenteditable="true" bind:this={edit_box}></div>
     <div class="flex space-x-2 items-center mt-3">
         <input class="rounded-lg bg-zinc-800 px-3 py-2 font-minecraft flex-grow" placeholder="Import..." bind:value={import_text}>
         <button class="rounded-md bg-orange-600 hover:bg-orange-500 transition-all px-3 py-2" on:click={load}>Import</button>
