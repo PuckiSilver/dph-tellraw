@@ -7,3 +7,7 @@
 .btn {
     @apply p-1 hover:bg-zinc-800 rounded-md transition-all
 }
+
+.card {
+    @apply p-3 bg-black rounded-xl border-2 border-stone-900 flex items-center space-x-2 hover:bg-orange-600 cursor-pointer
+}
