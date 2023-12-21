@@ -1,14 +1,13 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ['./src/**/*.{html,js,svelte,ts}'],
-  theme: {
-    extend: {
-      fontFamily: {
-        lexend: ["Lexend", "sans-serif"],
-        minecraft: ["Minecraft", "sans-serif"]
-      }
-    },
-  },
-  plugins: [],
-}
-
+	content: ["./src/**/*.{html,js,svelte,ts}"],
+	theme: {
+		extend: {
+			fontFamily: {
+				lexend: ["Lexend", "sans-serif"],
+				minecraft: ["Minecraft", "sans-serif"],
+			},
+		},
+	},
+	plugins: [],
+};

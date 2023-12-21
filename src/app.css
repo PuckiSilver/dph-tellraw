@@ -2,12 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
-@font-face { font-family: Minecraft; src: url('/Minecraft.otf'); } 
+@font-face {
+	font-family: Minecraft;
+	src: url("/Minecraft.otf");
+}
 
 .btn {
-    @apply p-1 hover:bg-zinc-800 rounded-md transition-all
+	@apply p-1 hover:bg-zinc-800 rounded-md transition-all;
 }
 
 .card {
-    @apply p-3 bg-zinc-950 rounded-xl border-2 border-stone-900 flex items-center space-x-2 hover:bg-orange-600 cursor-pointer
+	@apply p-3 bg-zinc-950 rounded-xl border-2 border-stone-900 flex items-center space-x-2 hover:bg-orange-600 cursor-pointer;
 }
