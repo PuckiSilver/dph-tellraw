@@ -160,6 +160,31 @@
 	function openColorPicker() {
 		col.click();
 	}
+
+	const applyColor = (color: string) => {
+		const selection = window.getSelection();
+		if (selection?.rangeCount) {
+			const range = selection.getRangeAt(0).cloneRange();
+			const span = document.createElement("span");
+			span.style.color = color;
+
+			const contents = Array.from(
+				range.extractContents().childNodes
+			).flatMap((node) => {
+				if (node.nodeName == 'SPAN') {
+					return Array.from(node.childNodes) || node;
+				} else {
+					return node;
+				}
+			});
+
+			contents.forEach((node) => { span.appendChild(node); });
+			range.insertNode(span);
+
+			selection.removeAllRanges();
+			selection.addRange(range);
+		}
+	};
 </script>
 
 <main class="ml-auto mr-auto block">
@@ -189,11 +214,11 @@
 		<div class="flex">
 			<button
 				use:tippy={{ content: "Dark Red", placement: "bottom" }}
-				on:click={() => document.execCommand("foreColor", undefined, "#aa0000")}
+				on:click={() => applyColor("#aa0000")}
 				class="btn text-red-800"><IconSquareFilled /></button>
 			<button
 				use:tippy={{ content: "Red", placement: "bottom" }}
-				on:click={() => document.execCommand("foreColor", undefined, "#FF5555")}
+				on:click={() => applyColor("#FF5555")}
 				class="btn text-red-500"><IconSquareFilled /></button>
 			<button
 				use:tippy={{ content: "Gold", placement: "bottom" }}
