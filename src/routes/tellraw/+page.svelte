@@ -168,17 +168,19 @@
 			const span = document.createElement("span");
 			span.style.color = color;
 
-			const contents = Array.from(
-				range.extractContents().childNodes
-			).flatMap((node) => {
-				if (node.nodeName == 'SPAN') {
-					return Array.from(node.childNodes) || node;
-				} else {
-					return node;
-				}
-			});
+			const contents = Array.from(range.extractContents().childNodes).flatMap(
+				(node) => {
+					if (node.nodeName == "SPAN") {
+						return Array.from(node.childNodes) || node;
+					} else {
+						return node;
+					}
+				},
+			);
 
-			contents.forEach((node) => { span.appendChild(node); });
+			contents.forEach((node) => {
+				span.appendChild(node);
+			});
 			range.insertNode(span);
 
 			selection.removeAllRanges();
